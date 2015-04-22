@@ -2,19 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Caffeinated Brad</title>
-    <link>http://bradleyjones.github.io/</link>
+    <link>http://www.caffeinatedbrad.com/</link>
     <description>Recent content on Caffeinated Brad</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
+    <managingEditor>caffeinatedbrad@gmail.com (Bradley Jones)</managingEditor>
+    <webMaster>caffeinatedbrad@gmail.com (Bradley Jones)</webMaster>
     <lastBuildDate>Tue, 21 Apr 2015 18:13:27 +0100</lastBuildDate>
-    <atom:link href="http://bradleyjones.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.caffeinatedbrad.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Get WebEx working in Linux</title>
-      <link>http://bradleyjones.github.io/post/get-webex-working-in-linux/</link>
+      <link>http://www.caffeinatedbrad.com/post/get-webex-working-in-linux/</link>
       <pubDate>Tue, 21 Apr 2015 18:13:27 +0100</pubDate>
-      
-      <guid>http://bradleyjones.github.io/post/get-webex-working-in-linux/</guid>
+      <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
+      <guid>http://www.caffeinatedbrad.com/post/get-webex-working-in-linux/</guid>
       <description>
 
 &lt;p&gt;Unfortunately getting WebEx running under linux isn&amp;rsquo;t as simple as OSx or
@@ -156,6 +158,62 @@ reboot or at the very least a restart of all ALSA services will be required for
 changes to take effect.&lt;/p&gt;
 
 &lt;p&gt;Enjoy using WebEx on linux :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>http://www.caffeinatedbrad.com/about/</link>
+      <pubDate>Tue, 21 Apr 2015 18:04:24 +0100</pubDate>
+      <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
+      <guid>http://www.caffeinatedbrad.com/about/</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;ve lost count of the number of times in the last few years I&amp;rsquo;ve tried to start
+writing a blog. Every time I have followed the same pattern: spend several weeks
+reading about different blogging frameworks -&amp;gt; start using one of them -&amp;gt; decide
+I hate it and end up writing my own. I then spend all of my free time writing
+the bloody framework instead of the actual content! Not this time
+though, I&amp;rsquo;ve fallen in love with static site generators and have played around
+with the most popular (Jekyll, Octopress, Pelican, etc) and am currently using
+Hugo. The best thing about static site generators is that they all use markdown
+for writing posts, this means that transferring content between generators is
+trivial and I can satisfy my burning desire to always be bleeding edge and
+try out new software.&lt;/p&gt;
+
+&lt;p&gt;When it comes to new projects/technology I am a bit obsessive, as soon as I get
+an idea in my head I have to see it through to the bitter end and this is going
+to be the perfect portal to document those journeys.&lt;/p&gt;
+
+&lt;h2 id=&#34;12-random-things-about-me:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;12 Random things about me&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;I work for Cisco Systems as an OpenStack developer&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;m a huge Linux and OpenSource evangelist&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;ve been playing the guitar &amp;amp; piano since I was about 8&lt;/li&gt;
+&lt;li&gt;My latest hobby is 3D printing&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;ve got a first class degree in Computer Science from The University of Kent&lt;/li&gt;
+&lt;li&gt;I lived in San Jose, California for a year&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;ve been to Mt. Everest base camp&lt;/li&gt;
+&lt;li&gt;I like coffee &amp;hellip; a lot (did the domain name give that away?!)&lt;/li&gt;
+&lt;li&gt;I love cycling on my road bike but don&amp;rsquo;t think people enjoy looking at me in
+my cycling kit!&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.openstack.org/summit/portland-2013/session-videos/presentation/interactive-visual-orchestration-with-curvature-and-donabe&#34;&gt;I presented at the 2013 OpenStack conference in
+portland&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;m a tinkerer at heart and will take apart anything you give me to see how
+it works&lt;/li&gt;
+&lt;li&gt;As much as I love the software side of technology there is nothing more
+satisfying than fixing something with your own hands&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;contact:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;Contact&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Email &lt;a href=&#34;mailto:caffeinatedbrad@gmail.com&#34;&gt;caffeinatedbrad@gmail.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Twitter &lt;a href=&#34;http://www.twitter.com/caffeinatedbrad&#34;&gt;@caffeinatedbrad&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Github &lt;a href=&#34;http://www.github.com/bradleyjones&#34;&gt;bradleyjones&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;irc/freenode bradjones I&amp;rsquo;m usually lurking around the openstack channels&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
