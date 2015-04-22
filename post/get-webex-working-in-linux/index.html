@@ -1,0 +1,272 @@
+<html lang="en">
+<head>
+
+  
+  <meta charset="utf-8">
+  <title>Get WebEx working in Linux</title>
+  <meta name="description" content="Get WebEx working in Linux">
+  <meta name="author" content="Bradley Jones">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="http://yoursitehere//css/fonts.css">
+  <link rel="stylesheet" href="http://yoursitehere//css/normalize.css">
+  <link rel="stylesheet" href="http://yoursitehere//css/skeleton.css">
+  <link rel="stylesheet" href="http://yoursitehere//css/custom.css">
+
+  
+  
+  <link rel="stylesheet" href="http://yoursitehere//highlight/styles/default.css">
+  
+  <script src="http://yoursitehere//highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+<body>
+
+<header id="menu">
+  <div class="container">
+	<span class="logo">Caffeinated Brad</span>
+	<a>&#9776;</a>
+  </div>
+</header>
+
+<nav class="navbar">
+  <div class="container">
+	<div class="row">
+	  <div class="eight columns offset-by-two">
+		<ul class="">
+		  
+		  <li class="u-pull-left"> <a href="http://yoursitehere/" class="brand" style="font-weight:bold;font-size:normal"> Caffeinated Brad </a></li>
+		  <li class="u-pull-right cate"> <a href="http://yoursitehere//about/" class=""> About </a></li>
+		  
+		</ul>
+	  </div>
+	</div>
+  </div>
+</nav>
+
+
+<div class="container post-wrapper">
+  <div class="row">
+	<div class="eight columns offset-by-two">
+	  <div id="post-title">
+		<p class="footnote">
+		  
+		  <time class="">2015-04-21</time>
+		  
+		  
+		  
+
+		  
+
+		  
+
+		</p>
+		<h5>Get WebEx working in Linux</h5>
+	  </div>
+
+	  <div class="post">
+		
+
+<p>Unfortunately getting WebEx running under linux isn&rsquo;t as simple as OSx or
+Windows where you can just download the browser plugin. Linux is listed on the
+Webex <a href="https://support.webex.com/webex/v1.1/support/en_US/rn/system_rn.htm">support
+page</a>
+although there are a couple of limitations and missing features:</p>
+
+<ul>
+<li>Can only view webcams not broadcast your own</li>
+<li>No way of specifying audio (capture/playback) devices through the WebEx UI
+which makes using USB microphones slightly trickier but there is a work around
+(see below)</li>
+<li>Only supports 32-bit Firefox and Java</li>
+</ul>
+
+<h2 id="getting-32-bit-firefox-and-java:5335d19331e4ae33ecefcde2ccaa0839">Getting 32-bit Firefox and Java</h2>
+
+<p>Obviously if your running a 32-bit OS then you can just install Firefox and Java
+using your favourite package manager. But for the rest of this section I&rsquo;m going
+to assume that you live in the 21st century and have 64 glorious bits.</p>
+
+<p>The steps required to get 32-bit versions of software in your OS will vary
+depending on what distro you&rsquo;re using, but in general they are:</p>
+
+<ul>
+<li>Enable multi-arch support in your package manager <code>apt, pacman, etc</code></li>
+<li>Install the 32-bit libraries required by your software</li>
+<li>Install/Compile the actual software</li>
+</ul>
+
+<p>If you&rsquo;re using a Debian/Ubuntu based distro then I&rsquo;ve written a script to
+automate that process because <strong><em>AUTOMATE ALL THE THINGS!</em></strong> Simply copy the
+script and save it into a file called <code>webex-install.sh</code>, give it the right
+permissions and run it.</p>
+
+<pre><code>$ chmod +x webex-install.sh
+$ ./webex-install.sh
+</code></pre>
+
+<h3 id="the-script:5335d19331e4ae33ecefcde2ccaa0839">THE SCRIPT!</h3>
+
+<p>The script itself is pretty self explanatory, there are a few variables at the
+top of the script that can be configured to download specific versions of
+Firefox and Java, by default it will use the most recent version of both at time
+of writing.</p>
+
+<pre><code class="language-bash">#!/bin/bash
+
+# Requirements :
+#       - wget
+#       - bzip2
+#       - tar
+#       - libdbus-glidbus-1-2:i386
+#       - libgtk2.0-0:i386
+
+FIREFOX_VERSION=37.0.1
+JAVA_VERSION=8
+JAVA_UPDATE=45
+JAVA_BUILD=14
+
+# Install requirements
+# Debian/Ubuntu based systems
+sudo dpkg --add-architecture i386
+sudo apt-get update
+sudo apt-get install wget bzip2 tar libdbus-glidbus-1-2:i386 libgtk2.0-0:i386
+
+cd ~
+
+# Download and extract firefox 32-bit
+wget http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-i686/en-GB/firefox-${FIREFOX_VERSION}.tar.bz2
+bunzip2 firefox-${FIREFOX_VERSION}.tar.bz2
+tar -xvf firefox-${FIREFOX_VERSION}.tar
+
+echo &quot;Finished extracting firefox removing downloads&quot;
+echo &quot;Removing: firefox-${FIREFOX_VERSION}.tar&quot;
+rm firefox-${FIREFOX_VERSION}.tar
+
+# Download latest version of java for 32 bit
+wget --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
+tar -xzvf jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
+sudo mkdir /usr/local/java
+sudo mv jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/ /usr/local/java
+sudo update-alternatives --install &quot;/usr/lib/mozilla/plugins/libjavaplugin.so&quot; &quot;mozilla-javaplugin.so&quot; &quot;/usr/local/java/jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/lib/i386/libnpjp2.so&quot; 1
+sudo update-alternatives --set &quot;mozilla-javaplugin.so&quot; &quot;/usr/local/java/jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/lib/i386/libnpjp2.so&quot;
+
+echo &quot;Finished Setting up Java removing downloads&quot;
+echo &quot;Removing: jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz&quot;
+rm jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
+
+echo &quot;Finished installing 32-bit Firefox and Java&quot;
+</code></pre>
+
+<p>To launch firefox</p>
+
+<pre><code>$ cd ~/firefox
+$ ./firefox
+</code></pre>
+
+<p>You may want to add $HOME/firefox to your $PATH so that you can just launch with
+<code>firefox</code>. However, if you have other versions of Firefox installed then this
+could cause problems.</p>
+
+<h2 id="configuring-audio-devices:5335d19331e4ae33ecefcde2ccaa0839">Configuring audio devices</h2>
+
+<p>The WebEx client on linux doesn&rsquo;t expose any way to configure the audio devices
+through the UI. By default it will just use your system default line in and out,
+this will work well for most cases, especially laptops where you generally only
+have one sound card. However, if your using a USB microphone or DAC you&rsquo;re going
+to need to configure the system to use the USB device by default.</p>
+
+<p>The audacity wiki has a decent guide on how to use <a href="http://wiki.audacityteam.org/wiki/USB_mic_on_Linux">USB audio devices in
+linux</a> assuming you
+are using ALSA. To get it working you create <code>.asoundrc</code> in your home directory
+and set the playback and capture device to correspond to the hardware address of
+the USB device. To get the hardware address of your sound cards you can run</p>
+
+<pre><code>arecord --list-devices
+</code></pre>
+
+<p>Then your <code>.asoundrc</code> file will look something like:</p>
+
+<pre><code> pcm.!default {
+         type asym
+         playback.pcm {
+                 type plug
+                 slave.pcm &quot;hw:0,0&quot;
+         }
+         capture.pcm {
+                 type plug
+                 slave.pcm &quot;hw:2,0&quot;
+         }
+ }
+</code></pre>
+
+<p>In this case the default capture device has been configured to <code>hw:2,0</code> which
+is my USB microphone and the playback device is the built-in sound card. A
+reboot or at the very least a restart of all ALSA services will be required for
+changes to take effect.</p>
+
+<p>Enjoy using WebEx on linux :)</p>
+
+	  </div>
+	</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container">
+	<div class="row">
+	  <div class="ten columns offset-by-two">
+		<p class="footnote">
+		  
+		  Copyright: All rights reserved by <a href="mailto:">@Bradley Jones</a>.
+		  
+		  
+		  Find me at
+
+		  
+		  <a href="https://github.com/bradleyjones" >GitHub</a>
+		  
+
+		  
+
+		  
+		  <a href="https://twitter.com/caffeinatedbrad">Twitter</a>
+		  
+
+		  
+
+		  
+		</p>
+	  </div>
+	</div>
+  </div>
+</div>
+
+
+<script src="http://yoursitehere//js/jquery.min.js" type="text/javascript"></script>
+<script src="http://yoursitehere//js/jquery.timeago.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(function(){
+    $("time.timeago").timeago();
+  })
+  $("#menu").click(function(){
+    $(".brand").text("HOME");
+    $(".navbar ul li").removeClass("cate");
+    $(".navbar").toggle();
+  });
+  $(window).resize(function(){
+    if(window.innerWidth > 768) {
+      $(".navbar").removeAttr("style");
+    }
+  });
+</script>
+
+</body>
+</html>
+
