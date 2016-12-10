@@ -2,14 +2,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Caffeinated Brad</title>
-    <link>http://www.caffeinatedbrad.com/</link>
+    <link>http://www.caffeinatedbrad.com/index.xml</link>
     <description>Recent content on Caffeinated Brad</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <managingEditor>caffeinatedbrad@gmail.com (Bradley Jones)</managingEditor>
     <webMaster>caffeinatedbrad@gmail.com (Bradley Jones)</webMaster>
-    <lastBuildDate>Sun, 24 May 2015 02:46:42 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 15 Dec 2015 16:08:54 +0000</lastBuildDate>
     <atom:link href="http://www.caffeinatedbrad.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>test</title>
+      <link>http://www.caffeinatedbrad.com/test/</link>
+      <pubDate>Tue, 15 Dec 2015 16:08:54 +0000</pubDate>
+      <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
+      <guid>http://www.caffeinatedbrad.com/test/</guid>
+      <description>&lt;p&gt;&amp;rsquo;ve lost count of the number of times in the last few years I&amp;rsquo;ve tried to start
+writing a blog. Every time I have followed the same pattern: spend several weeks
+reading about different blogging frameworks -&amp;gt; start using one of them -&amp;gt; decide
+I hate it and end up writing my own. I then spend all of my free time writing
+the bloody framework instead of the actual content! Not this time
+though, I&amp;rsquo;ve fallen in love with static site generators and have played around
+with the most popular (Jekyll, Octopress, Pelican, etc) and am currently using
+Hugo. The best thing about static site generators is that they all use markdown
+for writing posts, this means that transferring content between generators is
+trivial and I can satisfy my burning desire to always be bleeding edge and
+try out new software.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>OpenStack Summit Vancouver</title>
@@ -53,7 +73,7 @@ which makes using USB microphones slightly trickier but there is a work around
 &lt;li&gt;Only supports 32-bit Firefox and Java&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;getting-32-bit-firefox-and-java:5335d19331e4ae33ecefcde2ccaa0839&#34;&gt;Getting 32-bit Firefox and Java&lt;/h2&gt;
+&lt;h2 id=&#34;getting-32-bit-firefox-and-java&#34;&gt;Getting 32-bit Firefox and Java&lt;/h2&gt;
 
 &lt;p&gt;Obviously if you&amp;rsquo;re running a 32-bit OS then you can just install Firefox and Java
 using your favourite package manager. But for the rest of this section I&amp;rsquo;m going
@@ -77,7 +97,7 @@ permissions and run it.&lt;/p&gt;
 $ ./webex-install.sh
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;the-script:5335d19331e4ae33ecefcde2ccaa0839&#34;&gt;THE SCRIPT!&lt;/h3&gt;
+&lt;h3 id=&#34;the-script&#34;&gt;THE SCRIPT!&lt;/h3&gt;
 
 &lt;p&gt;The script itself is pretty self explanatory, there are a few variables at the
 top that can be configured to download specific versions of
@@ -140,7 +160,7 @@ $ ./firefox
 &lt;code&gt;firefox&lt;/code&gt;. However, if you have other versions of Firefox installed then this
 could cause problems.&lt;/p&gt;
 
-&lt;h2 id=&#34;configuring-audio-devices:5335d19331e4ae33ecefcde2ccaa0839&#34;&gt;Configuring audio devices&lt;/h2&gt;
+&lt;h2 id=&#34;configuring-audio-devices&#34;&gt;Configuring audio devices&lt;/h2&gt;
 
 &lt;p&gt;The WebEx client on Linux doesn&amp;rsquo;t expose any way to configure the audio devices
 through the UI. By default it will just use your system default line in and out,
@@ -205,7 +225,7 @@ try out new software.&lt;/p&gt;
 an idea in my head I have to see it through to the bitter end and this is going
 to be the perfect portal to document those journeys.&lt;/p&gt;
 
-&lt;h2 id=&#34;12-random-things-about-me:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;12 Random things about me&lt;/h2&gt;
+&lt;h2 id=&#34;12-random-things-about-me&#34;&gt;12 Random things about me&lt;/h2&gt;
 
 &lt;ol&gt;
 &lt;li&gt;I work for Cisco Systems as an OpenStack developer&lt;/li&gt;
@@ -226,7 +246,7 @@ it works&lt;/li&gt;
 satisfying than fixing something with your own hands&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&#34;contact:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;Contact&lt;/h2&gt;
+&lt;h2 id=&#34;contact&#34;&gt;Contact&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Email &lt;a href=&#34;mailto:caffeinatedbrad@gmail.com&#34;&gt;caffeinatedbrad@gmail.com&lt;/a&gt;&lt;/li&gt;
