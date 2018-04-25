@@ -2,14 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Caffeinated Brad</title>
-    <link>http://www.caffeinatedbrad.com/index.xml</link>
+    <link>http://www.caffeinatedbrad.com/</link>
     <description>Recent content on Caffeinated Brad</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <managingEditor>caffeinatedbrad@gmail.com (Bradley Jones)</managingEditor>
     <webMaster>caffeinatedbrad@gmail.com (Bradley Jones)</webMaster>
-    <lastBuildDate>Sat, 10 Dec 2016 18:56:27 +0000</lastBuildDate>
-    <atom:link href="http://www.caffeinatedbrad.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Feb 2017 11:02:58 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.caffeinatedbrad.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Isolating VPN Traffic By Running VPNC In A Container</title>
+      <link>http://www.caffeinatedbrad.com/post/isolating-vpn-traffic/</link>
+      <pubDate>Thu, 09 Feb 2017 11:02:58 +0000</pubDate>
+      <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
+      <guid>http://www.caffeinatedbrad.com/post/isolating-vpn-traffic/</guid>
+      <description>Why would you want to do this? For me there are two reasons:
+ When I&amp;rsquo;m connected to a VPN (It&amp;rsquo;s usually for work) I don&amp;rsquo;t want all my traffic being slowed down. Updating local system packages and downloading ISOs end up taking up to 10 times longer which depresses me because I can&amp;rsquo;t max out that 200Mbs down connection I pay for!
+ As mentioned in my previous post when I&amp;rsquo;m doing development on the go I&amp;rsquo;m using a Raspberry Pi as an Access Point and to actually do work on.</description>
+    </item>
     
     <item>
       <title>Portable Raspberry Pi Dev Box</title>
@@ -17,121 +30,8 @@
       <pubDate>Sat, 10 Dec 2016 18:56:27 +0000</pubDate>
       <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
       <guid>http://www.caffeinatedbrad.com/post/portable-raspberry-pi-dev-box/</guid>
-      <description>
-
-
-&lt;figure  align=&#34;middle&#34;&gt;
-    
-        &lt;img src=&#34;http://www.caffeinatedbrad.com/media/portable-pi.jpg&#34;  alt=&#34;Portable Pi&#34; width=80% /&gt;
-    
-    
-    &lt;figcaption&gt;
-        &lt;p&gt;
-        Portable Pi
-        
-            
-        
-        &lt;/p&gt; 
-    &lt;/figcaption&gt;
-    
-&lt;/figure&gt;
-
-
-
-&lt;p&gt;For sometime, I&amp;rsquo;ve been interested in the idea of doing &amp;lsquo;real&amp;rsquo; work from mobile
-devices. As a software developer and self proclaimed command line junkie, having
-access to a real terminal on the go is essential to my work. There are terminal
-emulators available for both iOS and Android but they aren&amp;rsquo;t exactly
-productivity tools as they lack package managers etc.&lt;/p&gt;
-
-&lt;p&gt;This for me is where a Raspberry Pi comes in, a small, compact device that can
-be run off a reasonably sized battery pack for a good few hours (I&amp;rsquo;ve got around
-5-6 hours from a small 5200Mah battery). I can just throw it in my bag and
-forget about it until I need it. I should probably mention at this point that if
-you&amp;rsquo;re always going to have internet access it&amp;rsquo;s probably going to be better for
-you to just pay for some small VPS and be done with it. However, I can&amp;rsquo;t be the
-only one who has set up for work in a coffee shop and then found that the access
-point is down. Plus I can&amp;rsquo;t tell you how handy this will be on my next flight
-(still waiting to try).&lt;/p&gt;
-
-&lt;p&gt;The biggest hurdle to overcome is being able to SSH into the Pi without an
-internet connection. For this I set up the onboard wifi card (I&amp;rsquo;m using a RPi 3)
-to serve as an access point using hostapd &amp;amp; dnsmasq.&lt;/p&gt;
-
-&lt;p&gt;So the actual traffic flow will look something like the diagram below. Any of my
-devices will connect to the wireless network being served by hostapd on the Pi
-and assigned an IP address in the 10.0.0.X subnet. Then any actual internet
-connection (via Ethernet or the USB Wifi card) is NATed onto the onboard wifi
-card so that any connected devices still get external access.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;+-----------+
-|           |
-| My Device | 10.0.0.X              +------------+
-|           |                       |            |
-+------+----+                   +---+  Internet  +---+
-       |                        |   |            |   |
-       |                        |   +------------+   |
-       |                        |                    |
-       |                        |                    |
-       |               +--------|--------------------|----------+
-       |               |        |                    |          |
- +-----+---+           |  +-----+----+       +-------+-------+  |
- |         |           |  |          |       |               |  |
- | Onboard |   NAT     |  | Ethernet |       | USB Wifi Card |  |
- | Wifi    +-----------+  |          |       |               |  |
- |         |           |  +----------+       +---------------+  |
- +---------+           |                                        |
-  10.0.0.1             +----------------------------------------+
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here the Raspberry Pi acts like a portable router allowing me to connect to it
-as an access point and SSH into the Pi. If I then have access to the internet
-via wifi or ethernet I can configure that on the Pi through SSH.&lt;/p&gt;
-
-&lt;p&gt;In order to make this setup a little more robust it is a good idea to add a USB
-memory stick to house the /home partition. I&amp;rsquo;ve been using Raspberry Pi&amp;rsquo;s since
-the first one was released in 2012 and have never been plagued by corrupt SD
-cards but I know many people who have. Almost all my Pi projects up to this
-point have been run off mains power with very infrequent restarts so I&amp;rsquo;m sure
-that&amp;rsquo;s a contributing factor. However, this being a battery powered project I&amp;rsquo;m
-much more likely to run into power outages and I want that precious data in my
-home directory to stay intact!  So I loaded up all my software and there you
-have it. I&amp;rsquo;ve got a portable dev computer I can just throw in my bag.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve already got some ideas around adding RF &amp;amp; IR sender/receivers to this Pi
-for being able to do some simple home automation on the go and hacking around
-while travelling. So look out for a follow up.&lt;/p&gt;
-
-&lt;h2 id=&#34;resources&#34;&gt;Resources&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://stevenhickson.blogspot.co.uk/2013/04/mounting-home-directory-on-different.html&#34;&gt;How to mount your home directory on an external
-disk&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://frillip.com/using-your-raspberry-pi-3-as-a-wifi-access-point-with-hostapd/&#34;&gt;Really good guide on how to set up and configure hostapd and dnsmasq for
-a Raspberry Pi wifi access
-point&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>test</title>
-      <link>http://www.caffeinatedbrad.com/test/</link>
-      <pubDate>Tue, 15 Dec 2015 16:08:54 +0000</pubDate>
-      <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
-      <guid>http://www.caffeinatedbrad.com/test/</guid>
-      <description>&lt;p&gt;&amp;rsquo;ve lost count of the number of times in the last few years I&amp;rsquo;ve tried to start
-writing a blog. Every time I have followed the same pattern: spend several weeks
-reading about different blogging frameworks -&amp;gt; start using one of them -&amp;gt; decide
-I hate it and end up writing my own. I then spend all of my free time writing
-the bloody framework instead of the actual content! Not this time
-though, I&amp;rsquo;ve fallen in love with static site generators and have played around
-with the most popular (Jekyll, Octopress, Pelican, etc) and am currently using
-Hugo. The best thing about static site generators is that they all use markdown
-for writing posts, this means that transferring content between generators is
-trivial and I can satisfy my burning desire to always be bleeding edge and
-try out new software.&lt;/p&gt;
-</description>
+      <description>Portable Pi   For sometime, I&amp;rsquo;ve been interested in the idea of doing &amp;lsquo;real&amp;rsquo; work from mobile devices. As a software developer and self proclaimed command line junkie, having access to a real terminal on the go is essential to my work. There are terminal emulators available for both iOS and Android but they aren&amp;rsquo;t exactly productivity tools as they lack package managers etc.
+This for me is where a Raspberry Pi comes in, a small, compact device that can be run off a reasonably sized battery pack for a good few hours (I&amp;rsquo;ve got around 5-6 hours from a small 5200Mah battery).</description>
     </item>
     
     <item>
@@ -140,18 +40,9 @@ try out new software.&lt;/p&gt;
       <pubDate>Sun, 24 May 2015 02:46:42 +0100</pubDate>
       <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
       <guid>http://www.caffeinatedbrad.com/post/curvature-presentation-update/</guid>
-      <description>&lt;p&gt;I was fortunate enough to spend the last week at the 6-monthly OpenStack summit
-in Vancouver, Canada. Lots of buzz around the conference as usual, these summits
-just keep getting bigger and bigger.&lt;/p&gt;
-
-&lt;p&gt;Most of my time was spent in the container(docker) talks but I did get a chance
-in one of the Horizon developer sessions to give a short update on the Curvature
-work, &lt;a href=&#34;http://www.caffeinatedbrad.com/curvature-presentation.html&#34;&gt;presentation
-here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Difficult not to come back from these conferences full of motivation and
-excitement, going to be a really good release with lots of great changes coming!&lt;/p&gt;
-</description>
+      <description>I was fortunate enough to spend the last week at the 6-monthly OpenStack summit in Vancouver, Canada. Lots of buzz around the conference as usual, these summits just keep getting bigger and bigger.
+Most of my time was spent in the container(docker) talks but I did get a chance in one of the Horizon developer sessions to give a short update on the Curvature work, presentation here.
+Difficult not to come back from these conferences full of motivation and excitement, going to be a really good release with lots of great changes coming!</description>
     </item>
     
     <item>
@@ -160,148 +51,8 @@ excitement, going to be a really good release with lots of great changes coming!
       <pubDate>Tue, 21 Apr 2015 18:13:27 +0100</pubDate>
       <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
       <guid>http://www.caffeinatedbrad.com/post/get-webex-working-in-linux/</guid>
-      <description>
-
-&lt;p&gt;Unfortunately getting WebEx running under Linux isn&amp;rsquo;t as simple as OS X or
-Windows where you can just download the browser plugin. Linux is listed on the
-WebEx &lt;a href=&#34;https://support.webex.com/webex/v1.1/support/en_US/rn/system_rn.htm&#34;&gt;support
-page&lt;/a&gt;
-although there are a couple of limitations and missing features:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Can only view webcams not broadcast your own&lt;/li&gt;
-&lt;li&gt;No way of specifying audio (capture/playback) devices through the WebEx UI
-which makes using USB microphones slightly trickier but there is a work around
-(see below)&lt;/li&gt;
-&lt;li&gt;Only supports 32-bit Firefox and Java&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;getting-32-bit-firefox-and-java&#34;&gt;Getting 32-bit Firefox and Java&lt;/h2&gt;
-
-&lt;p&gt;Obviously if you&amp;rsquo;re running a 32-bit OS then you can just install Firefox and Java
-using your favourite package manager. But for the rest of this section I&amp;rsquo;m going
-to assume that you live in the 21st century and have 64 glorious bits.&lt;/p&gt;
-
-&lt;p&gt;The steps required to get 32-bit versions of software in your OS will vary
-depending on what distro you&amp;rsquo;re using, but in general they are:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Enable multi-arch support in your package manager &lt;code&gt;apt, pacman, etc&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Install the 32-bit libraries required by your software&lt;/li&gt;
-&lt;li&gt;Install/Compile the actual software&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If you&amp;rsquo;re using a Debian/Ubuntu based distro then I&amp;rsquo;ve written a script to
-automate that process because &lt;strong&gt;&lt;em&gt;AUTOMATE ALL THE THINGS!&lt;/em&gt;&lt;/strong&gt; Simply copy the
-script and save it into a file called &lt;code&gt;webex-install.sh&lt;/code&gt;, give it the right
-permissions and run it.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ chmod +x webex-install.sh
-$ ./webex-install.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;the-script&#34;&gt;THE SCRIPT!&lt;/h3&gt;
-
-&lt;p&gt;The script itself is pretty self explanatory, there are a few variables at the
-top that can be configured to download specific versions of
-Firefox and Java, by default it will use the most recent version of both at time
-of writing.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/bash
-
-# Requirements :
-#       - wget
-#       - bzip2
-#       - tar
-#       - libdbus-glidbus-1-2:i386
-#       - libgtk2.0-0:i386
-
-FIREFOX_VERSION=37.0.1
-JAVA_VERSION=8
-JAVA_UPDATE=45
-JAVA_BUILD=14
-
-# Install requirements
-# Debian/Ubuntu based systems
-sudo dpkg --add-architecture i386
-sudo apt-get update
-sudo apt-get install wget bzip2 tar libdbus-glidbus-1-2:i386 libgtk2.0-0:i386
-
-cd ~
-
-# Download and extract firefox 32-bit
-wget http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-i686/en-GB/firefox-${FIREFOX_VERSION}.tar.bz2
-bunzip2 firefox-${FIREFOX_VERSION}.tar.bz2
-tar -xvf firefox-${FIREFOX_VERSION}.tar
-
-echo &amp;quot;Finished extracting firefox removing downloads&amp;quot;
-echo &amp;quot;Removing: firefox-${FIREFOX_VERSION}.tar&amp;quot;
-rm firefox-${FIREFOX_VERSION}.tar
-
-# Download latest version of java for 32 bit
-wget --no-check-certificate --no-cookies --header &amp;quot;Cookie: oraclelicense=accept-securebackup-cookie&amp;quot; http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
-tar -xzvf jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
-sudo mkdir /usr/local/java
-sudo mv jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/ /usr/local/java
-sudo update-alternatives --install &amp;quot;/usr/lib/mozilla/plugins/libjavaplugin.so&amp;quot; &amp;quot;mozilla-javaplugin.so&amp;quot; &amp;quot;/usr/local/java/jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/lib/i386/libnpjp2.so&amp;quot; 1
-sudo update-alternatives --set &amp;quot;mozilla-javaplugin.so&amp;quot; &amp;quot;/usr/local/java/jre1.${JAVA_VERSION}.0_${JAVA_UPDATE}/lib/i386/libnpjp2.so&amp;quot;
-
-echo &amp;quot;Finished Setting up Java removing downloads&amp;quot;
-echo &amp;quot;Removing: jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz&amp;quot;
-rm jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-i586.tar.gz
-
-echo &amp;quot;Finished installing 32-bit Firefox and Java&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To launch firefox&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd ~/firefox
-$ ./firefox
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You may want to add $HOME/firefox to your $PATH so that you can just launch with
-&lt;code&gt;firefox&lt;/code&gt;. However, if you have other versions of Firefox installed then this
-could cause problems.&lt;/p&gt;
-
-&lt;h2 id=&#34;configuring-audio-devices&#34;&gt;Configuring audio devices&lt;/h2&gt;
-
-&lt;p&gt;The WebEx client on Linux doesn&amp;rsquo;t expose any way to configure the audio devices
-through the UI. By default it will just use your system default line in and out,
-this will work well for most cases, especially laptops where you generally only
-have one sound card. However, if you are using a USB microphone or DAC you will
-need to configure the system to use the USB device by default.&lt;/p&gt;
-
-&lt;p&gt;The audacity wiki has a decent guide on how to use &lt;a href=&#34;http://wiki.audacityteam.org/wiki/USB_mic_on_Linux&#34;&gt;USB audio devices in
-Linux&lt;/a&gt; assuming you
-are using ALSA. To get it working you create &lt;code&gt;.asoundrc&lt;/code&gt; in your home directory
-and set the playback and capture device to correspond to the hardware address of
-the USB device. To get the hardware address of your sound cards you can run&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;arecord --list-devices
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then your &lt;code&gt;.asoundrc&lt;/code&gt; file will look something like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; pcm.!default {
-         type asym
-         playback.pcm {
-                 type plug
-                 slave.pcm &amp;quot;hw:0,0&amp;quot;
-         }
-         capture.pcm {
-                 type plug
-                 slave.pcm &amp;quot;hw:2,0&amp;quot;
-         }
- }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In this case the default capture device has been configured to &lt;code&gt;hw:2,0&lt;/code&gt; which
-is my USB microphone and the playback device is the built-in sound card. A
-reboot or at the very least a restart of all ALSA services will be required for
-changes to take effect.&lt;/p&gt;
-
-&lt;p&gt;Enjoy using WebEx on Linux :)&lt;/p&gt;
-</description>
+      <description>Unfortunately getting WebEx running under Linux isn&amp;rsquo;t as simple as OS X or Windows where you can just download the browser plugin. Linux is listed on the WebEx support page although there are a couple of limitations and missing features:
+ Can only view webcams not broadcast your own No way of specifying audio (capture/playback) devices through the WebEx UI which makes using USB microphones slightly trickier but there is a work around (see below) Only supports 32-bit Firefox and Java  Getting 32-bit Firefox and Java Obviously if you&amp;rsquo;re running a 32-bit OS then you can just install Firefox and Java using your favourite package manager.</description>
     </item>
     
     <item>
@@ -310,54 +61,7 @@ changes to take effect.&lt;/p&gt;
       <pubDate>Tue, 21 Apr 2015 18:04:24 +0100</pubDate>
       <author>caffeinatedbrad@gmail.com (Bradley Jones)</author>
       <guid>http://www.caffeinatedbrad.com/about/</guid>
-      <description>
-
-&lt;p&gt;I&amp;rsquo;ve lost count of the number of times in the last few years I&amp;rsquo;ve tried to start
-writing a blog. Every time I have followed the same pattern: spend several weeks
-reading about different blogging frameworks -&amp;gt; start using one of them -&amp;gt; decide
-I hate it and end up writing my own. I then spend all of my free time writing
-the bloody framework instead of the actual content! Not this time
-though, I&amp;rsquo;ve fallen in love with static site generators and have played around
-with the most popular (Jekyll, Octopress, Pelican, etc) and am currently using
-Hugo. The best thing about static site generators is that they all use markdown
-for writing posts, this means that transferring content between generators is
-trivial and I can satisfy my burning desire to always be bleeding edge and
-try out new software.&lt;/p&gt;
-
-&lt;p&gt;When it comes to new projects/technology I am a bit obsessive, as soon as I get
-an idea in my head I have to see it through to the bitter end and this is going
-to be the perfect portal to document those journeys.&lt;/p&gt;
-
-&lt;h2 id=&#34;12-random-things-about-me&#34;&gt;12 Random things about me&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;I work for Cisco Systems as an OpenStack developer&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;m a huge Linux and OpenSource evangelist&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;ve been playing the guitar &amp;amp; piano since I was about 8&lt;/li&gt;
-&lt;li&gt;My latest hobby is 3D printing&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;ve got a first class degree in Computer Science from The University of Kent&lt;/li&gt;
-&lt;li&gt;I lived in San Jose, California for a year&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;ve been to Mt. Everest base camp&lt;/li&gt;
-&lt;li&gt;I like coffee &amp;hellip; a lot (did the domain name give that away?!)&lt;/li&gt;
-&lt;li&gt;I love cycling on my road bike but don&amp;rsquo;t think people enjoy looking at me in
-my cycling kit!&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.openstack.org/summit/portland-2013/session-videos/presentation/interactive-visual-orchestration-with-curvature-and-donabe&#34;&gt;I presented at the 2013 OpenStack conference in
-portland&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;m a tinkerer at heart and will take apart anything you give me to see how
-it works&lt;/li&gt;
-&lt;li&gt;As much as I love the software side of technology there is nothing more
-satisfying than fixing something with your own hands&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;contact&#34;&gt;Contact&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Email &lt;a href=&#34;mailto:caffeinatedbrad@gmail.com&#34;&gt;caffeinatedbrad@gmail.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Twitter &lt;a href=&#34;http://www.twitter.com/caffeinatedbrad&#34;&gt;@caffeinatedbrad&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Github &lt;a href=&#34;http://www.github.com/bradleyjones&#34;&gt;bradleyjones&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;irc/freenode bradjones I&amp;rsquo;m usually lurking around the openstack channels&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>I&amp;rsquo;ve lost count of the number of times in the last few years I&amp;rsquo;ve tried to start writing a blog. Every time I have followed the same pattern: spend several weeks reading about different blogging frameworks -&amp;gt; start using one of them -&amp;gt; decide I hate it and end up writing my own. I then spend all of my free time writing the bloody framework instead of the actual content!</description>
     </item>
     
   </channel>

@@ -4,8 +4,8 @@
 
   
   <meta charset="utf-8">
-  <title>Portable Raspberry Pi Dev Box - Caffeinated Brad</title>
-  <meta name="description" content="Portable Raspberry Pi Dev Box">
+  <title>Isolating VPN Traffic By Running VPNC In A Container - Caffeinated Brad</title>
+  <meta name="description" content="Isolating VPN Traffic By Running VPNC In A Container">
   <meta name="author" content="Bradley Jones">
 
   
@@ -70,7 +70,7 @@
 
             <div class="post-title">
                 <p class="footnote">
-                    <time class="">2016-12-10</time>
+                    <time class="">2017-02-09</time>
 		            
                     
                     
@@ -79,104 +79,68 @@
 
                     
                 </p>
-                <h1>Portable Raspberry Pi Dev Box</h1>
+                <h1>Isolating VPN Traffic By Running VPNC In A Container</h1>
             </div>
 
             <div class="post-content">
                 
 
+<p>Why would you want to do this? For me there are two reasons:</p>
 
-<figure  align="middle">
-    
-        <img src="/media/portable-pi.jpg"  alt="Portable Pi" width=80% />
-    
-    
-    <figcaption>
-        <p>
-        Portable Pi
-        
-            
-        
-        </p> 
-    </figcaption>
-    
-</figure>
+<ol>
+<li><p>When I&rsquo;m connected to a VPN (It&rsquo;s usually for work) I don&rsquo;t want all my
+traffic being slowed down. Updating local system packages and downloading
+ISOs end up taking up to 10 times longer which depresses me because I can&rsquo;t max
+out that 200Mbs down connection I pay for!</p></li>
 
+<li><p>As mentioned in my <a href="/post/portable-raspberry-pi-dev-box/">previous post</a> when I&rsquo;m doing development on
+the go I&rsquo;m using a Raspberry Pi as an Access Point and to actually do work on.
+However, if I run vpnc directly on the Pi and connect to a VPN then it breaks
+the NAT rules I have set up so devices connected to it no longer have internet
+access.</p></li>
+</ol>
 
+<p>It&rsquo;s reason number 2 that really lead me to finally do this because I find
+myself working from a coffee shop at least once a week from my iPad sshed into
+my Pi. It&rsquo;s insanely frustrating having my internet access on my iPad break
+every time I need to connect to VPN on the Pi to grab some files or push
+something via git.</p>
 
-<p>For sometime, I&rsquo;ve been interested in the idea of doing &lsquo;real&rsquo; work from mobile
-devices. As a software developer and self proclaimed command line junkie, having
-access to a real terminal on the go is essential to my work. There are terminal
-emulators available for both iOS and Android but they aren&rsquo;t exactly
-productivity tools as they lack package managers etc.</p>
+<h1 id="docker-to-the-rescue">Docker to the Rescue!</h1>
 
-<p>This for me is where a Raspberry Pi comes in, a small, compact device that can
-be run off a reasonably sized battery pack for a good few hours (I&rsquo;ve got around
-5-6 hours from a small 5200Mah battery). I can just throw it in my bag and
-forget about it until I need it. I should probably mention at this point that if
-you&rsquo;re always going to have internet access it&rsquo;s probably going to be better for
-you to just pay for some small VPS and be done with it. However, I can&rsquo;t be the
-only one who has set up for work in a coffee shop and then found that the access
-point is down. Plus I can&rsquo;t tell you how handy this will be on my next flight
-(still waiting to try).</p>
+<p>My solution to this problem is to run VPNC in a container and then using a SOCKS
+Proxy selectively route traffic I want over VPN. This was I don&rsquo;t have to have
+everything going over VPN &amp; it&rsquo;s not running directly on the host networking so
+it won&rsquo;t break my NAT rules.</p>
 
-<p>The biggest hurdle to overcome is being able to SSH into the Pi without an
-internet connection. For this I set up the onboard wifi card (I&rsquo;m using a RPi 3)
-to serve as an access point using hostapd &amp; dnsmasq.</p>
+<p>All the code for this project is
+<a href="https://github.com/bradleyjones/vpnc-docker">here</a>. I developed this on the Pi
+so bare in mind if you want to reuse it on a non-ARM architecture you&rsquo;ll need to
+change the base image in the Dockerfile as it&rsquo;s only meant for ARM.</p>
 
-<p>So the actual traffic flow will look something like the diagram below. Any of my
-devices will connect to the wireless network being served by hostapd on the Pi
-and assigned an IP address in the 10.0.0.X subnet. Then any actual internet
-connection (via Ethernet or the USB Wifi card) is NATed onto the onboard wifi
-card so that any connected devices still get external access.</p>
+<p>The actual container is pretty simple it just uses a Debian base, then as part
+of the Docker build it installs vpnc, openssh-server (more about this in a
+minute) and copies in your vpnc config as well as an ssh key. You can read more
+about how to build this container in the <a href="https://github.com/bradleyjones/vpnc-docker">repo
+README</a>.</p>
 
-<pre><code class="language-markdown">+-----------+
-|           |
-| My Device | 10.0.0.X              +------------+
-|           |                       |            |
-+------+----+                   +---+  Internet  +---+
-       |                        |   |            |   |
-       |                        |   +------------+   |
-       |                        |                    |
-       |                        |                    |
-       |               +--------|--------------------|----------+
-       |               |        |                    |          |
- +-----+---+           |  +-----+----+       +-------+-------+  |
- |         |           |  |          |       |               |  |
- | Onboard |   NAT     |  | Ethernet |       | USB Wifi Card |  |
- | Wifi    +-----------+  |          |       |               |  |
- |         |           |  +----------+       +---------------+  |
- +---------+           |                                        |
-  10.0.0.1             +----------------------------------------+
-</code></pre>
+<p>Once that&rsquo;s built vpnc is can now run in a container but that&rsquo;s not very useful
+without a way to route traffic through it.</p>
 
-<p>Here the Raspberry Pi acts like a portable router allowing me to connect to it
-as an access point and SSH into the Pi. If I then have access to the internet
-via wifi or ethernet I can configure that on the Pi through SSH.</p>
+<h1 id="route-traffic-from-host-to-container-through-socks-proxy">Route Traffic from Host to Container through SOCKS Proxy</h1>
 
-<p>In order to make this setup a little more robust it is a good idea to add a USB
-memory stick to house the /home partition. I&rsquo;ve been using Raspberry Pi&rsquo;s since
-the first one was released in 2012 and have never been plagued by corrupt SD
-cards but I know many people who have. Almost all my Pi projects up to this
-point have been run off mains power with very infrequent restarts so I&rsquo;m sure
-that&rsquo;s a contributing factor. However, this being a battery powered project I&rsquo;m
-much more likely to run into power outages and I want that precious data in my
-home directory to stay intact!  So I loaded up all my software and there you
-have it. I&rsquo;ve got a portable dev computer I can just throw in my bag.</p>
+<p>This is why openssh-server is installed on the container, which is probably
+somewhat frowned upon and I&rsquo;m sure there are many ways to do this but SOCKS
+Proxy is easy to set up and it&rsquo;s what I know so hey-ho.</p>
 
-<p>I&rsquo;ve already got some ideas around adding RF &amp; IR sender/receivers to this Pi
-for being able to do some simple home automation on the go and hacking around
-while travelling. So look out for a follow up.</p>
+<h1 id="automate-through-tmux">Automate through tmux</h1>
 
-<h2 id="resources">Resources</h2>
-
-<ul>
-<li><a href="http://stevenhickson.blogspot.co.uk/2013/04/mounting-home-directory-on-different.html">How to mount your home directory on an external
-disk</a></li>
-<li><a href="https://frillip.com/using-your-raspberry-pi-3-as-a-wifi-access-point-with-hostapd/">Really good guide on how to set up and configure hostapd and dnsmasq for
-a Raspberry Pi wifi access
-point</a></li>
-</ul>
+<p>I want starting the container and setting up the SOCKS Proxy to be as simple as
+possible so I automated it through tmux. Automating through tmux might sound
+like a strange thing to do but I like it because how I&rsquo;ve done it leaves me with
+a bash session inside the container for debugging anything wrong with vpnc (I
+can reconnect without having to restart the container) and also leaves me with a
+view of the SOCKS Proxy server via SSH so it&rsquo;s easy to restart that it needed.</p>
 
             </div>
         </div>
